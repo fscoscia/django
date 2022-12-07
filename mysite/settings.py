@@ -99,9 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-PY"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Asuncion"
 
 USE_I18N = True
 
@@ -125,3 +125,7 @@ SIMPLE_JWT = {
 CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
 ]
+
+
+APIKEY = os.environ.get("APIKEY", "ap-781346f38bd0458ac1ff8853")
+HOST = os.environ.get("HOST", "https://staging.adamspay.com/api/v1")
