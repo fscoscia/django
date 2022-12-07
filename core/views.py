@@ -1,6 +1,6 @@
 import datetime
 import requests
-import json
+import uuid
 from rest_framework import viewsets, mixins, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -40,8 +40,10 @@ class CartViewSet(
         host = settings.HOST
         start_date = datetime.datetime.utcnow().replace()
         end_date = start_date + datetime.timedelta(hours=1)
+        uid = str(uuid.uuid4()).split("-")[0]
+
         debt = {
-            "docId": f"nav{cart_id}",
+            "docId": f"nav{cart_id}{uid}",
             "amount": {"currency": "PYG", "value": serializer.data.get("total_price")},
             "label": "Compra de regalos",
             "validPeriod": {
