@@ -68,7 +68,10 @@ class CartViewSet(
 
     @action(methods=["get"], detail=False, url_path="active", url_name="active")
     def get_active_cart(self, request):
-        cart = self.queryset.get(status=Cart.ACTIVE)
+        try:
+            cart = self.queryset.get(status=Cart.ACTIVE)
+        except Cart.DoesNotExist:
+            return Response(data={"details": [], "total_price": 0}, status=200)
         serializer = CartRetrieveSerializer(instance=cart)
         return Response(serializer.data)
 
@@ -85,7 +88,7 @@ class CallbackView(views.APIView):
         pay_status = request.data.get("debt").get("payStatus", None)
         if pay_status:
             print("entre")
-            doc_id = request.data.get("docId")
+            doc_id = request.data.get("debt").get("docId")
             cart = Cart.objects.get(doc_id=doc_id)
             if pay_status.get("status") == "paid":
                 cart.status = Cart.PAID
