@@ -84,9 +84,10 @@ class CallbackView(views.APIView):
         print(request.data)
         pay_status = request.data.get("payStatus", None)
         if pay_status:
+            print("entre")
             doc_id = request.data.get("docId")
             cart = Cart.objects.get(doc_id=doc_id)
-            if pay_status.status == "paid":
+            if pay_status.get("status") == "paid":
                 cart.status = Cart.PAID
             cart.raw_response = json.dumps(request.data)
             cart.save()
