@@ -21,7 +21,8 @@ class Product(models.Model):
 class Cart(models.Model):
     INACTIVE = 0
     ACTIVE = 1
-    STATUS_CHOICES = ((INACTIVE, "Inactivo"), (ACTIVE, "Activo"))
+    PAID = 2
+    STATUS_CHOICES = ((INACTIVE, "Inactivo"), (ACTIVE, "Activo"), (PAID, "Pagado"))
     profile = models.ForeignKey(
         to=UserProfile,
         verbose_name="Perfil",
@@ -31,7 +32,7 @@ class Cart(models.Model):
     status = models.PositiveSmallIntegerField(
         verbose_name="Estado", choices=STATUS_CHOICES
     )
-
+    doc_id = models.CharField(max_length=15, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

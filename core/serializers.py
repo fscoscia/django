@@ -24,7 +24,7 @@ class CartRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ("id", "status", "details", "total_price")
+        fields = ("id", "status", "details", "total_price", "doc_id")
 
     def get_details(self, obj):
         data = []

@@ -1,7 +1,7 @@
 import datetime
 import requests
 import uuid
-from rest_framework import viewsets, mixins, permissions
+from rest_framework import viewsets, mixins, permissions, views
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from core.models import Order, Cart, Product
@@ -45,9 +45,11 @@ class CartViewSet(
         start_date = datetime.datetime.utcnow().replace()
         end_date = start_date + datetime.timedelta(hours=1)
         uid = str(uuid.uuid4()).split("-")[0]
-
+        doc_id = f"nav{cart_id}{uid}"
+        cart.doc_id = doc_id
+        cart.save()
         debt = {
-            "docId": f"nav{cart_id}{uid}",
+            "docId": doc_id,
             "amount": {"currency": "PYG", "value": serializer.data.get("total_price")},
             "label": "Compra de regalos",
             "validPeriod": {
@@ -63,8 +65,27 @@ class CartViewSet(
         r = requests.post(f"{host}/debts", json=post, headers=headers)
         return Response(data=r.json(), status=r.status_code)
 
+    @action(methods=["get"], detail=False, url_path="active", url_name="active")
+    def get_active_cart(self, request):
+        cart = self.queryset.get(status=Cart.ACTIVE)
+        serializer = CartRetrieveSerializer(instance=cart)
+        return Response(serializer.data)
+
 
 class ProductViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Product.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProductSerializer
+
+
+class CallbackView(views.APIView):
+    def post(self, request):
+        print(request.data)
+        notify = request.data.get("notify")
+
+        return Response(
+            {
+                "status": "ok",
+            },
+            status=200,
+        )
