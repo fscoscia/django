@@ -32,7 +32,9 @@ class Cart(models.Model):
     status = models.PositiveSmallIntegerField(
         verbose_name="Estado", choices=STATUS_CHOICES
     )
-    doc_id = models.CharField(max_length=15, blank=True, default="")
+    doc_id = models.CharField(max_length=15, blank=True, default="", editable=False)
+    raw_response = models.JSONField(editable=False, default=dict)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

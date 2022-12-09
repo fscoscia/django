@@ -1,6 +1,7 @@
 import datetime
 import requests
 import uuid
+import json
 from rest_framework import viewsets, mixins, permissions, views
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -81,8 +82,14 @@ class ProductViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class CallbackView(views.APIView):
     def post(self, request):
         print(request.data)
-        notify = request.data.get("notify")
-
+        pay_status = request.data.get("payStatus", None)
+        if pay_status:
+            doc_id = request.data.get("docId")
+            cart = Cart.objects.get(doc_id=doc_id)
+            if pay_status.status == "paid":
+                cart.status = Cart.PAID
+            cart.raw_response = json.dumps(request.data)
+            cart.save()
         return Response(
             {
                 "status": "ok",
