@@ -4,9 +4,4 @@ from users.models import UserProfile
 
 from django.contrib.auth.admin import UserAdmin
 
-
-class ProfileInline(admin.StackedInline):
-    model = UserProfile
-
-
-UserAdmin.inlines = [ProfileInline]
+admin.site.register(UserProfile)

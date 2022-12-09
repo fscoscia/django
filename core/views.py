@@ -4,8 +4,12 @@ import uuid
 from rest_framework import viewsets, mixins, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from core.models import Order, Cart
-from core.serializers import OrderCreateSerializer, CartRetrieveSerializer
+from core.models import Order, Cart, Product
+from core.serializers import (
+    OrderCreateSerializer,
+    CartRetrieveSerializer,
+    ProductSerializer,
+)
 from django.conf import settings
 
 
@@ -58,3 +62,9 @@ class CartViewSet(
         }
         r = requests.post(f"{host}/debts", json=post, headers=headers)
         return Response(data=r.json(), status=r.status_code)
+
+
+class ProductViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Product.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProductSerializer

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Order, Cart
+from core.models import Order, Cart, Product
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
@@ -44,3 +44,9 @@ class CartRetrieveSerializer(serializers.ModelSerializer):
         for order in obj.orders.all():
             total += order.product.price * order.quantity
         return total
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        exclude = ("created_at", "updated_at")

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
     "core",
     "users",
 ]
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -126,6 +128,16 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 APIKEY = os.environ.get("APIKEY", "ap-781346f38bd0458ac1ff8853")
 HOST = os.environ.get("HOST", "https://staging.adamspay.com/api/v1")
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+}
