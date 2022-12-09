@@ -84,10 +84,8 @@ class ProductViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class CallbackView(views.APIView):
     def post(self, request):
-        print(request.data)
         pay_status = request.data.get("debt").get("payStatus", None)
         if pay_status:
-            print("entre")
             doc_id = request.data.get("debt").get("docId")
             cart = Cart.objects.get(doc_id=doc_id)
             if pay_status.get("status") == "paid":
